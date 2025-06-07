@@ -80,7 +80,20 @@ namespace OstaFandy.PL.Mapper
                         }).ToList();
                     });
             }
-
+           
+            CreateMap<EditHandymanDTO, Handyman>()
+               .AfterMap((src, dest) =>
+               {
+                   if (dest.User != null)
+                   {
+                       dest.User.FirstName = src.FirstName;
+                       dest.User.LastName = src.LastName;
+                       dest.User.Email = src.Email;
+                       dest.User.Phone = src.Phone;
+                       dest.User.UpdatedAt = DateTime.UtcNow;
+                   }
+               })
+               .ReverseMap();
         }
     }
 }

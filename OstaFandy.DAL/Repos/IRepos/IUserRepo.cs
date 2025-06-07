@@ -9,5 +9,7 @@ namespace OstaFandy.DAL.Repos.IRepos
 {
     public interface IUserRepo : IGeneralRepo<User>
     {
+        bool CheckUniqueOfEmailPhone(string email, string phone);
+        bool SoftDelete(int id);
     }
 }

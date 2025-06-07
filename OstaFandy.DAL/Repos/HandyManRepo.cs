@@ -10,9 +10,14 @@ namespace OstaFandy.DAL.Repos
 {
     class HandyManRepo : GeneralRepo<Handyman>, IHandyManRepo
     {
+        private readonly AppDbContext _db;
         public HandyManRepo(AppDbContext db) : base(db)
         {
-            
+            _db = db;
+        }
+        public bool checkUniqueNationalId(string nationalid)
+        {
+            return _db.Handymen.FirstOrDefault(a => a.NationalId == nationalid) == null;
         }
     }
 }
