@@ -6,7 +6,7 @@ namespace OstaFandy.PL.BL.IBL
 {
     public interface IHandyManService
     {
-        PaginationHelper<Handyman> GetAll(string searchString = "", int pageNumber = 1, int pageSize = 5);
+        PaginationHelper<Handyman> GetAll(string searchString = "", int pageNumber = 1, int pageSize = 5, bool? isActive = null);
 
 
         List<AdminHandyManDTO> GetAllPendingHandymen();

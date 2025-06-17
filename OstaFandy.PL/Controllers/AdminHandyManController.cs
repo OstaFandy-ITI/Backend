@@ -44,9 +44,9 @@ namespace OstaFandy.PL.Controllers
         [HttpGet]
         [EndpointDescription("AdminHandyMan/getall")]
         [EndpointSummary("return all handymen")]
-        public IActionResult GetAll(string searchString = "", int pageNumber = 1, int pageSize = 5)
+        public IActionResult GetAll(string searchString = "", int pageNumber = 1, int pageSize = 5, bool? isActive = null)
         {
-            var result = _handymanService.GetAll(searchString, pageNumber, pageSize);
+            var result = _handymanService.GetAll(searchString, pageNumber, pageSize, isActive);
 
             if (result.Data == null || !result.Data.Any())
             {

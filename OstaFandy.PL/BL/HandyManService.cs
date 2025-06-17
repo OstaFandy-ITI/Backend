@@ -25,11 +25,11 @@ namespace OstaFandy.PL.BL
             _cloudinaryService = cloudinaryService;
         }
 
-        public PaginationHelper<Handyman> GetAll(string searchString = "", int pageNumber = 1, int pageSize = 5)
+        public PaginationHelper<Handyman> GetAll(string searchString = "", int pageNumber = 1, int pageSize = 5, bool? isActive = null)
         {
             try
             {
-                var data = _unitOfWork.HandyManRepo.GetAll(includeProperties: "User,Specialization,DefaultAddress,BlockDates,JobAssignments").ToList();
+                var data = _unitOfWork.HandyManRepo.GetAll(a => a.Status == "Approved", includeProperties: "User,Specialization,DefaultAddress,BlockDates,JobAssignments").ToList();
 
                 if (data == null)
                 {
@@ -53,8 +53,16 @@ namespace OstaFandy.PL.BL
                         h.Specialization.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase)
                     ).ToList();
                 }
+ 
+                if (isActive == true)
+                {
+                data = data.Where(a => a.User.IsActive == true).ToList();
+                }else if(isActive == false)
+                {
+                    data = data.Where(a => a.User.IsActive == false).ToList();
+                }
 
-                return PaginationHelper<Handyman>.Create(data, pageNumber, pageSize, searchString);
+                    return PaginationHelper<Handyman>.Create(data, pageNumber, pageSize, searchString);
             }
             catch (Exception ex)
             {
@@ -333,8 +341,11 @@ namespace OstaFandy.PL.BL
                 if (res > 0)
                 {
                     await transaction.CommitAsync();
+ 
+                    return 1;
+ 
                     return user.Id;
-                }
+                 }
                 else
                 {
                     await transaction.RollbackAsync();

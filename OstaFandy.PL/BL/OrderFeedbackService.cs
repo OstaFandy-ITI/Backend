@@ -37,8 +37,6 @@ namespace OstaFandy.PL.BL
                         SearchString = searchString
                     };
                 }
-                var orderFeedbackDtos = _mapper.Map<List<OrderFeedbackDto>>(reviews);
-
                 // Apply search filter if provided
                 if (!string.IsNullOrEmpty(searchString))
                 {
@@ -46,11 +44,11 @@ namespace OstaFandy.PL.BL
                         h.Booking.JobAssignment.Handyman.User.FirstName.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
                         h.Booking.JobAssignment.Handyman.User.LastName.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
                         h.Booking.JobAssignment.Handyman.Specialization.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase)
-                    //h.User.LastName.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
-                    //h.User.Email.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
-                    //h.Specialization.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase)
                     ).ToList();
                 }
+                var orderFeedbackDtos = _mapper.Map<List<OrderFeedbackDto>>(reviews);
+
+                
                 return PaginationHelper<OrderFeedbackDto>.Create(orderFeedbackDtos, pageNumber, pageSize, searchString);
             }
             catch (Exception ex)

@@ -7,6 +7,7 @@ using OstaFandy.PL.BL.IBL;
 using OstaFandy.PL.DTOs;
 using OstaFandy.PL.utils;
 using System.Linq.Expressions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace OstaFandy.PL.BL
 {
@@ -26,23 +27,31 @@ namespace OstaFandy.PL.BL
         {
              Expression<Func<User, bool>> filter = u => u.Client != null;
 
-            if (!string.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(searchString) && isActive.HasValue)
             {
                 var searchLower = searchString.ToLower();
                 filter = u => u.Client != null &&
-                    (u.FirstName.ToLower().Contains(searchLower) ||
-                     u.LastName.ToLower().Contains(searchLower) ||
-                     u.Email.ToLower().Contains(searchLower) ||
-                     u.Phone.Contains(searchString));
+                             u.IsActive == isActive.Value &&
+                             (u.FirstName.ToLower().Contains(searchLower) ||
+                              u.LastName.ToLower().Contains(searchLower) ||
+                              u.Email.ToLower().Contains(searchLower) ||
+                              u.Phone.Contains(searchString));
             }
-
-            if (isActive.HasValue)
+            else if (!string.IsNullOrEmpty(searchString))
             {
-                var currentFilter = filter;
-                filter = u => currentFilter.Compile()(u) && u.IsActive == isActive.Value;
+                var searchLower = searchString.ToLower();
+                filter = u => u.Client != null &&
+                             (u.FirstName.ToLower().Contains(searchLower) ||
+                              u.LastName.ToLower().Contains(searchLower) ||
+                              u.Email.ToLower().Contains(searchLower) ||
+                              u.Phone.Contains(searchString));
+            }
+            else if (isActive.HasValue)
+            {
+                filter = u => u.Client != null && u.IsActive == isActive.Value;
             }
 
-                var users = _unitOfWork.UserRepo.GetAll(filter, "Client,Client.DefaultAddress,Addresses,Client.Bookings,Client.Bookings.Payments").ToList();
+            var users = _unitOfWork.UserRepo.GetAll(filter, "Client,Client.DefaultAddress,Addresses,Client.Bookings,Client.Bookings.Payments").ToList();
                 var clientDTOs = _mapper.Map<List<AdminDisplayClientDTO>>(users);
                 return PaginationHelper<AdminDisplayClientDTO>.Create(clientDTOs, pageNumber, pageSize, searchString);
         }

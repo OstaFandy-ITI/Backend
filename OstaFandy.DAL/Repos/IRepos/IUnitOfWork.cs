@@ -28,7 +28,7 @@ namespace OstaFandy.DAL.Repos.IRepos
 
         public Task<int> SaveAsync();
         public IDbContextTransaction BeginTransaction();
-       
+
 
         Task<IDbContextTransaction> BeginTransactionasync();
     }

@@ -206,7 +206,7 @@ namespace OstaFandy.PL.Mapper
             CreateMap<Booking, DashboardDTO>()
             .AfterMap((src, dest) =>
             {
-                dest.Service = src.BookingServices != null && src.BookingServices.Any()
+                 dest.Service = src.BookingServices != null && src.BookingServices.Any()
                     ? string.Join(", ", src.BookingServices.Select(bs => bs.Service.Name))
                     : string.Empty;
 
@@ -225,7 +225,7 @@ namespace OstaFandy.PL.Mapper
 
                 dest.Revenue = src.TotalPrice ?? 0;
             });
-
+ 
             #region Handyman application
             CreateMap<HandyManApplicationDto, User>()
            .ForMember(dest => dest.IsActive, opt => opt.MapFrom(_ => true))
@@ -244,6 +244,7 @@ namespace OstaFandy.PL.Mapper
                 .ForMember(dest => dest.AddressType, opt => opt.MapFrom(src => src.AddressType))
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow));
             #endregion
+ 
 
             #region service catalog
 
@@ -260,6 +261,7 @@ namespace OstaFandy.PL.Mapper
 
             #endregion
 
+ 
         }
     }
 }

@@ -19,7 +19,7 @@ namespace OstaFandy.PL.Controllers
         [HttpGet]
         [EndpointDescription("OrdersFeedback/GetAll")]
         [EndpointSummary("return all feedbacks and rates")]
-        public IActionResult GetAll(string searchString = "", int pageNumber = 1, int pageSize = 10)
+        public IActionResult GetAll(string searchString = "", int pageNumber = 1, int pageSize = 5)
         {
             //search by service and handyman nam
             try

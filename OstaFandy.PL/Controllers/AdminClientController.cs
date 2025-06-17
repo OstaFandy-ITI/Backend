@@ -32,7 +32,7 @@ namespace OstaFandy.PL.Controllers
                 {
                     return Ok(new
                     {
-                        message = "There are no clients in the system yet",
+                        message = "There are no clients in the system yet Or deactivated Client",
                         data = new List<AdminDisplayClientDTO>(),
                         currentPage = result.CurrentPage,
                         totalPages = result.TotalPages,
